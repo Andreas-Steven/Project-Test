@@ -19,14 +19,15 @@ class AuthController extends ResourceController
     public function register()
     {
         $rules = $this->validate([
+            'name'              => 'required',
             'email'             => 'required|valid_email',
             'password'          => 'required|min_length[6]',
-            'confirmPassword'   => 'required|matches[password]'
         ]);
 
         if ($rules) {
             $userModel = new UsersModel;
             $userData = [
+                'name'     => $this->request->getVar('name'),
                 'email'     => $this->request->getVar('email'),
                 'password'  => password_hash($this->request->getVar('password'), PASSWORD_BCRYPT)
             ];
@@ -64,7 +65,7 @@ class AuthController extends ResourceController
             return $this->respond($response, 401);
         }
 
-        $key        = getenv("JWT_SECRET");
+        $key        = 'z0s7wbi0dsilktlgbxb5fzmegxaxke4sy87afp4ndav1v47y19s1w1jmcrdt';
         $iat        = time();
         $exp        = $iat + (60*60);
         $payload    = [
